@@ -1,0 +1,16 @@
+{
+  "name": "electromarket-backend",
+  "version": "1.0.0",
+  "description": "Web service propio de ElectroMarket (Express)",
+  "main": "servidor.js",
+  "scripts": {
+    "start": "node servidor.js",
+    "dev": "node --watch servidor.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo de electrónica con precios de venta.">
+  <title>ElectroMarket | Catálogo de venta</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script src="productos.js" defer></script>
+</head>
+<body data-modo="venta">
+
+  <header>
+    <div class="barra">
+      <div class="logo">Electro<span>Market</span></div>
+
+      <nav>
+        <a href="index.html">Precios base</a>
+        <a href="venta.html">Catálogo de venta</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="contenedor">
+      <h1>Productos para venta</h1>
+      <p>
+        Explora nuestro catálogo de electrónica con precios
+        calculados mediante un incremento del 35 % sobre
+        el precio base de cada artículo.
+      </p>
+    </div>
+  </section>
+
+  <main class="contenedor">
+    <div class="controles">
+      <input
+        type="search"
+        id="buscador"
+        placeholder="Buscar un producto..."
+        aria-label="Buscar productos"
+      >
+
+      <select
+        id="filtro-categoria"
+        aria-label="Filtrar por categoría"
+      >
+        <option value="Todas">Todas las categorías</option>
+      </select>
+    </div>
+
+    <div class="resumen">
+      <h2>Catálogo de venta</h2>
+      <span id="contador">0 productos</span>
+    </div>
+
+    <section
+      id="lista-productos"
+      class="grid-productos"
+      aria-label="Catálogo de venta"
+    ></section>
+  </main>
+
+  <footer>
+    <p>ElectroMarket | Catálogo de venta</p>
+    <p>Los precios incluyen un incremento del 35 % sobre el precio base.</p>
+  </footer>
+
+</body>
+</html>
