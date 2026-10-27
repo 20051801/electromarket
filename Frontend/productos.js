@@ -1,5 +1,5 @@
 // Dirección del web service propio (backend con Express).
-const API_URL = "/api";
+const API_URL = "https://electromarket-b9qe.onrender.com";
 
 // Aquí se guardan los productos recibidos de nuestra API.
 let productos = [];
