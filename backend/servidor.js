@@ -1,15 +1,17 @@
 const express = require("express");
 const path = require("path");
 const {
+  inicializar,
   obtenerProductos,
   obtenerProductoPorId,
+  obtenerCategorias,
   obtenerTipoCambio
-} = require("./servicios/ProductoServicio");
+} = require("./servicios/productosServicio");
 
 const app = express();
 const PUERTO = process.env.PORT || 3000;
 
-// CORS básico para que Live Server (puerto 5500) pueda llamar a la API.
+// CORS básico (permite llamar a la API desde otro origen).
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -28,37 +30,33 @@ app.get("/api/salud", (req, res) => {
   res.json({ estado: "ok", hora: new Date().toISOString() });
 });
 
-// GET /api/tipo-cambio -> tipo de cambio USD a MXN usado
+// GET /api/tipo-cambio -> tipo de cambio USD a MXN (API de terceros)
 app.get("/api/tipo-cambio", async (req, res) => {
   const tasa = await obtenerTipoCambio();
   res.json({ de: "USD", a: "MXN", tasa });
+});
+
+// GET /api/categorias
+app.get("/api/categorias", async (req, res) => {
+  try {
+    res.json(await obtenerCategorias());
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al consultar la base de datos." });
+  }
 });
 
 // GET /api/productos?modo=base|venta&categoria=Celulares&buscar=texto
 app.get("/api/productos", async (req, res) => {
   try {
     const modo = leerModo(req);
-    let productos = await obtenerProductos(modo);
-
     const { categoria, buscar } = req.query;
-
-    if (categoria) {
-      productos = productos.filter(p => p.categoria === categoria);
-    }
-
-    if (buscar) {
-      const texto = String(buscar).toLowerCase().trim();
-      productos = productos.filter(p =>
-        p.nombre.toLowerCase().includes(texto) ||
-        p.descripcion.toLowerCase().includes(texto) ||
-        p.categoria.toLowerCase().includes(texto)
-      );
-    }
+    const productos = await obtenerProductos(modo, { categoria, buscar });
 
     res.json({ modo, total: productos.length, productos });
   } catch (error) {
     console.error(error);
-    res.status(502).json({ error: "No se pudo obtener el catálogo del proveedor externo." });
+    res.status(500).json({ error: "Error al consultar la base de datos." });
   }
 });
 
@@ -80,17 +78,28 @@ app.get("/api/productos/:id", async (req, res) => {
     res.json(producto);
   } catch (error) {
     console.error(error);
-    res.status(502).json({ error: "No se pudo obtener el producto del proveedor externo." });
+    res.status(500).json({ error: "Error al consultar la base de datos." });
   }
 });
 
-// Opcional: sirve el frontend desde http://localhost:3000
+// Sirve el frontend desde la misma dirección que la API.
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 
+// Arranca: primero prepara la base de datos y luego abre el puerto.
+async function iniciar() {
+  try {
+    await inicializar();
+    app.listen(PUERTO, () => {
+      console.log(`ElectroMarket escuchando en el puerto ${PUERTO}`);
+    });
+  } catch (error) {
+    console.error("No se pudo conectar con la base de datos:", error.message);
+    process.exit(1);
+  }
+}
+
 if (require.main === module) {
-  app.listen(PUERTO, () => {
-    console.log(`ElectroMarket en http://localhost:${PUERTO}`);
-  });
+  iniciar();
 }
 
 // Se exporta para poder probarlo con Supertest.

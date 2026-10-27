@@ -1,0 +1,24 @@
+-- Esquema de la base de datos de ElectroMarket (MySQL)
+-- El servidor crea estas tablas automáticamente al iniciar.
+ 
+CREATE TABLE IF NOT EXISTS categorias (
+  id     INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(60) NOT NULL UNIQUE
+);
+ 
+CREATE TABLE IF NOT EXISTS productos (
+  id           INT PRIMARY KEY,
+  nombre       VARCHAR(150) NOT NULL,
+  descripcion  TEXT,
+  imagen       VARCHAR(500),
+  precio_base  DECIMAL(10,2) NOT NULL,
+  categoria_id INT NOT NULL,
+  FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+);
+ 
+-- Consulta que usa la API para el catálogo:
+-- SELECT p.id, p.nombre, c.nombre AS categoria, p.descripcion, p.imagen, p.precio_base
+-- FROM productos p
+-- JOIN categorias c ON c.id = p.categoria_id
+-- ORDER BY p.id;
+ 

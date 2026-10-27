@@ -1,7 +1,7 @@
 {
   "name": "electromarket-backend",
-  "version": "1.0.0",
-  "description": "Web service propio de ElectroMarket (Express)",
+  "version": "2.0.0",
+  "description": "Web service propio de ElectroMarket (Express + MySQL)",
   "main": "servidor.js",
   "scripts": {
     "start": "node servidor.js",
@@ -11,6 +11,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.11.0"
   }
 }
