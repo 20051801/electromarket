@@ -7,7 +7,7 @@ let productos = [];
 // Pide los productos al backend. El cálculo del +35 % lo hace el servidor.
 async function cargarProductos(modoVenta) {
   const modo = modoVenta ? "venta" : "base";
-  const respuesta = await fetch(`${API_URL}/productos?modo=${modo}`);
+  const respuesta = await fetch(`${API_URL}/api/productos?modo=${modo}`);
 
   if (!respuesta.ok) {
     throw new Error(`El servidor respondió ${respuesta.status}`);
